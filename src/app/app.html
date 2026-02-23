@@ -1,0 +1,31 @@
+<div class="container">
+
+  
+  <div *ngIf="greeting" class="greeting">
+    <h2>{{ greeting }}</h2>
+    <p>Login Time: {{ loginTime }}</p>
+  </div>
+
+  <h3>Login</h3>
+
+  <form (ngSubmit)="login()">
+
+    <input
+      type="text"
+      placeholder="Username"
+      [(ngModel)]="username"
+      name="username"
+      required>
+
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      name="password"
+      required>
+
+    <button type="submit">Login</button>
+
+  </form>
+
+</div>
