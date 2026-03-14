@@ -1,97 +1,129 @@
-<div class="container">
+<div *ngIf="!showDashboard" class="container">
 
-  <!-- Greeting -->
   <div *ngIf="greeting" class="greeting">
     <h2>{{ greeting }}</h2>
     <p>Time: {{ loginTime }}</p>
   </div>
 
-  <!-- LOGIN FORM -->
+  <!-- LOGIN -->
   <div *ngIf="isLoginMode">
 
     <h3>Login</h3>
 
     <form (ngSubmit)="login()">
-
-      <input
-        type="text"
-        placeholder="Username"
-        [(ngModel)]="username"
-        name="username"
-        required>
-
-      <input
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="password"
-        name="password"
-        required>
-
+      <input type="text" placeholder="Username" [(ngModel)]="username" name="username" required>
+      <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
       <button type="submit">Login</button>
-
     </form>
 
-    <p class="switch">
-      Don't have an account?
-      <span (click)="switchMode()">Sign Up</span>
-    </p>
+
 
   </div>
 
+  <!-- SIGNUP -->
+<form [formGroup]="signupForm" (ngSubmit)="signup()">
 
-  <!-- SIGNUP FORM -->
-<div *ngIf="!isLoginMode">
-  <h3>Sign Up</h3>
+  <input
+    type="text"
+    placeholder="New Username"
+    formControlName="newUsername">
 
-  <form (ngSubmit)="signup()">
-    <input
-      type="text"
-      placeholder="New Username"
-      [(ngModel)]="newUsername"
-      name="newUsername"
-      required
-    />
+  <div class="error"
+       *ngIf="signupForm.get('newUsername')?.invalid &&
+              signupForm.get('newUsername')?.touched">
 
-    <input
-      type="password"
-      placeholder="New Password"
-      [(ngModel)]="newPassword"
-      name="newPassword"
-      required
-    />
+    <small *ngIf="signupForm.get('newUsername')?.errors?.['required']">
+      Username is required
+    </small>
 
-    <button type="submit">Create Account</button>
-  </form>
+    <small *ngIf="signupForm.get('newUsername')?.errors?.['minlength']">
+      Minimum 4 characters
+    </small>
 
-  <!-- Table of Accounts -->
-<div *ngIf="accounts.length > 0" class="table-wrapper">
-  <h4>Accounts List</h4>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Username</th>
-        <th>Password</th>
-        <th>Email</th>
-        <th>Course</th>
-        <th>Year & Section</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let account of accounts; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ account.username }}</td>
-        <td>{{ account.password }}</td>
-        <td>{{ account.email }}</td>
-        <td>{{ account.course }}</td>
-        <td>{{ account.yearSection }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>  
+      <small *ngIf="signupForm.get('newUsername')?.errors?.['email']">
+      Must be email
+    </small>
+  </div>
 
-  <p class="switch">
-    Already have an account?
-    <span (click)="switchMode()">Login</span>
-  </p>
+
+  <input
+    type="password"
+    placeholder="New Password"
+    formControlName="newPassword">
+
+  <div class="error"
+       *ngIf="signupForm.get('newPassword')?.invalid &&
+              signupForm.get('newPassword')?.touched">
+
+    <small *ngIf="signupForm.get('newPassword')?.errors?.['required']">
+      Password is required
+    </small>
+
+    <small *ngIf="signupForm.get('newPassword')?.errors?.['minlength']">
+      Minimum 6 characters
+    </small>
+  </div>
+
+<button type="submit">
+  Create Account
+</button>
+
+</form>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<div *ngIf="showDashboard" class="dashboard-layout">
+
+  <div class="sidebar">
+    <h3>CampusAssist</h3>
+    <p (click)="navigate('dashboard')">Dashboard</p>
+    <p (click)="navigate('users')">Users</p>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD PAGE -->
+    <div *ngIf="currentPage === 'dashboard'">
+      <h2>Welcome Dashboard</h2>
+      <div class="card">Profile</div>
+      <div class="card">Courses</div>
+      <div class="card">Schedule</div>
+    </div>
+
+    <!-- USERS PAGE -->
+    <div *ngIf="currentPage === 'users'">
+
+      <h2>User Accounts</h2>
+
+      <div *ngIf="accounts.length > 0" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Username</th>
+              <th>Password</th>
+              <th>Email</th>
+              <th>Course</th>
+              <th>Year & Section</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of accounts; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ account.username }}</td>
+              <td>{{ account.password }}</td>
+              <td>{{ account.email }}</td>
+              <td>{{ account.course }}</td>
+              <td>{{ account.yearSection }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
