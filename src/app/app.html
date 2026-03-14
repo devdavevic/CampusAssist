@@ -1,31 +1,97 @@
 <div class="container">
 
-  
+  <!-- Greeting -->
   <div *ngIf="greeting" class="greeting">
     <h2>{{ greeting }}</h2>
-    <p>Login Time: {{ loginTime }}</p>
+    <p>Time: {{ loginTime }}</p>
   </div>
 
-  <h3>Login</h3>
+  <!-- LOGIN FORM -->
+  <div *ngIf="isLoginMode">
 
-  <form (ngSubmit)="login()">
+    <h3>Login</h3>
 
+    <form (ngSubmit)="login()">
+
+      <input
+        type="text"
+        placeholder="Username"
+        [(ngModel)]="username"
+        name="username"
+        required>
+
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        name="password"
+        required>
+
+      <button type="submit">Login</button>
+
+    </form>
+
+    <p class="switch">
+      Don't have an account?
+      <span (click)="switchMode()">Sign Up</span>
+    </p>
+
+  </div>
+
+
+  <!-- SIGNUP FORM -->
+<div *ngIf="!isLoginMode">
+  <h3>Sign Up</h3>
+
+  <form (ngSubmit)="signup()">
     <input
       type="text"
-      placeholder="Username"
-      [(ngModel)]="username"
-      name="username"
-      required>
+      placeholder="New Username"
+      [(ngModel)]="newUsername"
+      name="newUsername"
+      required
+    />
 
     <input
       type="password"
-      placeholder="Password"
-      [(ngModel)]="password"
-      name="password"
-      required>
+      placeholder="New Password"
+      [(ngModel)]="newPassword"
+      name="newPassword"
+      required
+    />
 
-    <button type="submit">Login</button>
-
+    <button type="submit">Create Account</button>
   </form>
 
+  <!-- Table of Accounts -->
+<div *ngIf="accounts.length > 0" class="table-wrapper">
+  <h4>Accounts List</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Email</th>
+        <th>Course</th>
+        <th>Year & Section</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let account of accounts; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ account.username }}</td>
+        <td>{{ account.password }}</td>
+        <td>{{ account.email }}</td>
+        <td>{{ account.course }}</td>
+        <td>{{ account.yearSection }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>  
+
+  <p class="switch">
+    Already have an account?
+    <span (click)="switchMode()">Login</span>
+  </p>
 </div>
